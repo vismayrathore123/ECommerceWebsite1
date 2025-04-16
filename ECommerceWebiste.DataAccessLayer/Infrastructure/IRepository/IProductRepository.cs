@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository;
+using ECommerceWebsite.Models;
 
 namespace ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository
 {
-    public interface IUnitOfWork
+    public interface IProdcutRepository:IRepository<Product>
     {
-        ICategoryRepository Category { get; }
-        IProdcutRepository Product  { get; }
-        void Save();
+        void Update(Product product);
+        
     }
 }

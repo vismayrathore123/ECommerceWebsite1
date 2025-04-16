@@ -6,34 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 namespace ECommerceWebsite.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    public class ProductController : Controller
     {
         private IUnitOfWork _unitOfWork;
 
-        public CategoryController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            CategoryVM categoryVM = new CategoryVM();
-          categoryVM.categories = _unitOfWork.Category.GetAll();
-            return View(categoryVM);
+            ProductVM productVM = new ProductVM();
+            productVM.Products = _unitOfWork.Product.GetAll();
+            return View(productVM);
         }
 
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            CategoryVM vm= new CategoryVM();
+            ProductVM vm = new ProductVM();
             if (!id.HasValue || id == 0)
             {
                 return View (vm);
             }
             else
             {
-                vm.Category = _unitOfWork.Category.GetT(x => x.Id == id);
-                if (vm.Category == null)
+                vm.Products = _unitOfWork.Product.GetT(x => x.Id == id);
+                if (vm.Products == null)
                 {
                     return NotFound();
                 }
