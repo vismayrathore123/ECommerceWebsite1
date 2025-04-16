@@ -21,26 +21,33 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult CreateUpdate(int? id)
         {
+            Category category= new Category();
             if (!id.HasValue || id == 0)
             {
-                return NotFound();
+                return View (category);
             }
-
-            var category = _unitOfWork.Category.GetT(x=>x.Id==id);
-            if (category == null)
+            else
             {
-                return NotFound();
+                var Editcategory = _unitOfWork.Category.GetT(x => x.Id == id);
+                if (Editcategory == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(Editcategory);
+                }
+   
             }
 
-            return View(category);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category category)
-        {
+        public IActionResult CreateUpdate(Category category)
+        {   
             if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Update(category);
@@ -51,25 +58,25 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
             return View(category);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Category.Add(category);
-                _unitOfWork.Save();
-                TempData["Success"] = "Category Created Done!";
-                return RedirectToAction("Index");
-            }
-            return View(category);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Create(Category category)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _unitOfWork.Category.Add(category);
+        //        _unitOfWork.Save();
+        //        TempData["Success"] = "Category Created Done!";
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(category);
+        //}
 
         [HttpGet]
         public IActionResult Delete(int? id)
