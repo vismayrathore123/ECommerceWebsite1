@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ECommerceWebsite.Models.ViewModels
 {
-    public class CategoryVM
+    public class ProductVM
     {
-        public Category Category { get; set; } = new Category();
-        public IEnumerable<Category> categories { get; set; } = new List<Category>();
+        public IEnumerable<Product> Products { get; set; } 
     }
 }
