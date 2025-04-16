@@ -25,15 +25,15 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            ProductVM vm = new ProductVM();
+            CategoryVM vm = new CategoryVM();
             if (!id.HasValue || id == 0)
             {
-                return View (vm);
+                return View(vm);
             }
             else
             {
-                vm.Products = _unitOfWork.Product.GetT(x => x.Id == id);
-                if (vm.Products == null)
+                vm.Category = _unitOfWork.Category.GetT(x => x.Id == id);
+                if (vm.Category == null)
                 {
                     return NotFound();
                 }
@@ -41,7 +41,7 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
                 {
                     return View(vm);
                 }
-   
+
             }
 
         }
@@ -49,8 +49,8 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateUpdate(CategoryVM vm)
-        {   
-            if (ModelState.IsValid) 
+        {
+            if (ModelState.IsValid)
             {
                 if (vm.Category.Id == 0)
                 {
@@ -64,7 +64,7 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
                 }
 
                 _unitOfWork.Save();
-              
+
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
