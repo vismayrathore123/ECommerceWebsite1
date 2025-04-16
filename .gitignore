@@ -1,0 +1,20 @@
+# Build Folders
+bin/
+obj/
+
+# User-specific files
+*.csproj.user
+
+# Visual Studio and IDE settings
+.vs/
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Optional: Dev-only app settings (uncomment if needed)
+# appsettings.Development.json
+
+# Optional if you use these
+*.tsbuildinfo
