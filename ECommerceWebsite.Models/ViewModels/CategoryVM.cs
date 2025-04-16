@@ -9,5 +9,6 @@ namespace ECommerceWebsite.Models.ViewModels
     public class CategoryVM
     {
         public Category Category { get; set; }
+        public IEnumerable<Category> categories { get; set; }
     }
 }

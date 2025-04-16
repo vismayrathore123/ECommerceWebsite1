@@ -1,5 +1,6 @@
 ﻿using ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository;
 using ECommerceWebsite.Models;
+using ECommerceWebsite.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceWebsite.Areas.Admin.Controllers
@@ -16,28 +17,29 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _unitOfWork.Category.GetAll();
-            return View(categories);
+            CategoryVM categoryVM = new CategoryVM();
+          categoryVM.categories = _unitOfWork.Category.GetAll();
+            return View(categoryVM);
         }
 
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            Category category= new Category();
+            CategoryVM vm= new CategoryVM();
             if (!id.HasValue || id == 0)
             {
-                return View (category);
+                return View (vm);
             }
             else
             {
-                var Editcategory = _unitOfWork.Category.GetT(x => x.Id == id);
-                if (Editcategory == null)
+                vm.Category = _unitOfWork.Category.GetT(x => x.Id == id);
+                if (vm.Category == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return View(Editcategory);
+                    return View(vm);
                 }
    
             }
@@ -46,16 +48,24 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateUpdate(Category category)
+        public IActionResult CreateUpdate(CategoryVM vm)
         {   
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Update(category);
-                _unitOfWork.Save();
+                if (vm.Category.Id == 0)
+                {
+                    _unitOfWork.Category.Add(vm.Category);
+                }
+                else
+                {
+                    _unitOfWork.Category.Update(vm.Category);
+                }
+
+                    _unitOfWork.Save();
                 TempData["Success"] = "Category Updated Done!";
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return RedirectToAction("Index");
         }
 
         //[HttpGet]
