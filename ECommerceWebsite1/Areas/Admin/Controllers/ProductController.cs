@@ -1,5 +1,5 @@
 ﻿using ECommerceWebsite.DataAccessLayer.Infrastructure.IRepository;
-using ECommerceWebsite.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ECommerceWebsite.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,15 +25,23 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            CategoryVM vm = new CategoryVM();
+            ProductVM vm = new ProductVM()
+            {
+                Product= new(),
+                    Categories=_unitOfWork.Category.GetAll().Select(x=>new SelectListItem()
+                    {
+                        Text= x.Name,
+                        Value=x.Id.ToString()
+                    })
+            };
             if (!id.HasValue || id == 0)
             {
                 return View(vm);
             }
             else
             {
-                vm.Category = _unitOfWork.Category.GetT(x => x.Id == id);
-                if (vm.Category == null)
+                vm.Product = _unitOfWork.Product.GetT(x => x.Id == id);
+                if (vm.Product == null)
                 {
                     return NotFound();
                 }
