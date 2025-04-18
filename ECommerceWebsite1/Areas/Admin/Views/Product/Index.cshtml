@@ -18,15 +18,18 @@
         </div>
     </div>
 
-    <table class="table table-bordered table-striped" style="width:100%">
+    <table id="myTable" class="table table-bordered table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Product Name</th>
                 <th>Product Description</th>
                 <th>Price</th>
-                <th>Category</th>
+                @*<th>Category</th>*@
             </tr>
         </thead>
         
     </table>
 </div>
+@section scripts{
+    <script src="~/js/Product.js"></script>
+}

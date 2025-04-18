@@ -16,12 +16,18 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
         }
-
+        #region APICALL
+        public IActionResult AllProducts()
+        {
+            var products = _unitOfWork.Product.GetAll();
+            return Json(new { data = products });
+        }
+        #endregion
         public IActionResult Index()
         {
-            ProductVM productVM = new ProductVM();
-            productVM.Products = _unitOfWork.Product.GetAll();
-            return View(productVM);
+            //ProductVM productVM = new ProductVM();
+            //productVM.Products = _unitOfWork.Product.GetAll();
+            return View();
         }
 
         [HttpGet]
@@ -76,6 +82,7 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
                 if (vm.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(vm.Product);
+                    TempData["success"] = "Product Created Done";
                 }
                
              
