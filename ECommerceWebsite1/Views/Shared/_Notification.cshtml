@@ -6,13 +6,17 @@
 @if (!string.IsNullOrEmpty(successMessage))
 {
     <script>
-        toastr.success('@successMessage');
+        $(document).ready(function () {
+            toastr.success('@successMessage');
+        });
     </script>
 }
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <script>
-        toastr.error('@errorMessage');
+        $(document).ready(function () {
+            toastr.error('@errorMessage');
+        });
     </script>
 }
