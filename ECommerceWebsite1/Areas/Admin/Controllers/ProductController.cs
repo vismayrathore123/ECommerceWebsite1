@@ -9,10 +9,12 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private IUnitOfWork _unitOfWork;
+        private IWebHostEnvironment _hostingEnvironment;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -56,21 +58,29 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateUpdate(CategoryVM vm)
+        public IActionResult CreateUpdate(ProductVM vm, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                if (vm.Category.Id == 0)
-                {
-                    _unitOfWork.Category.Add(vm.Category);
-                    TempData["Success"] = "Category Created Done!";
+                string fileName = String.Empty;
+                if (file != null) {
+                    string uploadDir = Path.Combine(_hostingEnvironment.WebRootPath, "ProductImage");
+                    fileName = Guid.NewGuid().ToString() + "-" + file.FileName;
+                    string filePath= Path.Combine(uploadDir, fileName);
+                using(var fileStream=new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    vm.Product.ImageUrl = @"\ProductImage\" + fileName;
                 }
-                else
+                if (vm.Product.Id == 0)
                 {
-                    _unitOfWork.Category.Update(vm.Category);
-                    TempData["Success"] = "Category Updated Done!";
+                    _unitOfWork.Product.Add(vm.Product);
                 }
+               
+             
 
+               
                 _unitOfWork.Save();
 
                 return RedirectToAction("Index");
