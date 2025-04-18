@@ -19,7 +19,7 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
         #region APICALL
         public IActionResult AllProducts()
         {
-            var products = _unitOfWork.Product.GetAll();
+            var products = _unitOfWork.Product.GetAll(includeProperties:"Category");
             return Json(new { data = products });
         }
         #endregion
@@ -73,6 +73,16 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
                     string uploadDir = Path.Combine(_hostingEnvironment.WebRootPath, "ProductImage");
                     fileName = Guid.NewGuid().ToString() + "-" + file.FileName;
                     string filePath= Path.Combine(uploadDir, fileName);
+                    if (vm.Product.ImageUrl != null)
+                    {
+                        var oldImagePath = Path.Combine(_hostingEnvironment.WebRootPath, vm.Product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+
                 using(var fileStream=new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -82,13 +92,18 @@ namespace ECommerceWebsite.Areas.Admin.Controllers
                 if (vm.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(vm.Product);
-                    TempData["success"] = "Product Created Done";
+                    TempData["Success"] = "Product Created Done";
                 }
-               
-             
+                else
+                {
+                    _unitOfWork.Product.Update(vm.Product);
+                    TempData["Success"] = "Product Updated Done";
 
-               
-                _unitOfWork.Save();
+                }
+
+
+
+                    _unitOfWork.Save();
 
                 return RedirectToAction("Index");
             }
