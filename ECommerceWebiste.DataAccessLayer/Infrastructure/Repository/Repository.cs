@@ -42,6 +42,8 @@ namespace ECommerceWebsite.DataAccessLayer.Infrastructure.Repository
         }
 
         public IEnumerable<T> GetAll()
+        
+        
         {
             return _dbSet.ToList();
         }
